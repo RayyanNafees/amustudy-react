@@ -13,7 +13,9 @@ const Navbar = () => {
     const handleTextChange = (e) => {
         setInputText(e.target.value);
       };
+
     const { loggedinUser } = useContext(UserContext);
+ 
     return(
         <div className="h-[10vh] w-[100%] flex justify-between items-center bg-[#18181b] fixed px-10 font-medium">
             <h1 className="text-[1.2rem] font-bold text-white">
@@ -30,11 +32,11 @@ const Navbar = () => {
                     />
                 {loggedinUser !== '' ? (
                     <button 
-                    className="logout-btn text-red-400 hover:border-red-400"
-                    onClick={() => logout()}
-                >
-                  Logout
-                </button>
+                        className="logout-btn text-red-400 hover:border-red-400"
+                        onClick={() => logout()}
+                    >
+                        Logout
+                    </button>
                 ) : (
                     <Link to={'/login'} className="text-white hover:text-white/90">
                         Login

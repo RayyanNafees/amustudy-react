@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import pb from "../../lib/pocketbase";
+import UserContext from "../utils/UserContext";
+import { useContext } from "react";
 
 const Form = ({refresh}) => {
   const [inputText, setInputText] = useState('');
@@ -7,6 +9,8 @@ const Form = ({refresh}) => {
   const [photo, setPhoto] = useState(null);
   const [photoURL, setPhotoURL] = useState(null);
   const [ loading, setLoading ] = useState(false);
+
+  const { loggedinUser } = useContext(UserContext);
 
   useEffect(() => {
     if (photo) {
@@ -64,11 +68,11 @@ const Form = ({refresh}) => {
   };
 
   return (
-    <div className="mt-[15vh] p-4 mr-5 bg-[#fafbfb] text-black font-medium rounded-lg shadow">
+    <div className={`mt-[15vh] p-4 mr-5 bg-[#fafbfb] text-black font-medium rounded-lg shadow ${loggedinUser === '' ? 'cursor-not-allowed' : 'cursor-auto'}`}>
       <div className="flex flex-col items-center space-x-4 mb-4">
       <input
           type="text"
-          className="w-full py-2 ml-4 bg-[#fafbfb]  rounded-lg focus:outline-none"
+          className={`w-full py-2 ml-4 bg-[#fafbfb]  rounded-lg focus:outline-none ${loggedinUser === '' ? 'cursor-not-allowed' : 'cursor-auto'}`}
           placeholder="Title"
           value={title}
           rows='2'
@@ -76,7 +80,7 @@ const Form = ({refresh}) => {
         />
         <textarea
           type="text"
-          className="w-full resize-y py-2 bg-[#fafbfb]  rounded-lg focus:outline-none"
+          className={`w-full resize-y py-2 bg-[#fafbfb]  rounded-lg focus:outline-none ${loggedinUser === '' ? 'cursor-not-allowed' : 'cursor-auto'}`}
           placeholder="Start a post"
           value={inputText}
           rows='2'
@@ -95,7 +99,7 @@ const Form = ({refresh}) => {
         </div>
       )}
       <div className="flex items-center justify-between">
-        <label className="flex items-center space-x-2 cursor-pointer">
+        <label className={`flex items-center space-x-2 ${loggedinUser === '' ? 'cursor-not-allowed' : 'cursor-pointer'}`}>
           <input
             type="file"
             className="hidden"
@@ -110,7 +114,7 @@ const Form = ({refresh}) => {
         </label>
         <button
           onClick={handlePost}
-          className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+          className={`px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 ${loggedinUser === '' ? 'cursor-not-allowed' : 'cursor-pointer'}`}
         >
           {loading ? "Uploading.." : "Post"}
         </button>

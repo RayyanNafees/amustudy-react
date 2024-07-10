@@ -1,4 +1,4 @@
-import { createContext, useState } from 'react';
+import { createContext, useEffect, useState } from 'react';
 import pb from '../../lib/pocketbase';
 
 
@@ -8,9 +8,16 @@ export const UserProvider = ({ children }) => {
   const [loggedinUser, setLoggedinUser] = useState('');
 
   const updateLoggedinUser = () => {
-    setLoggedinUser(pb.authStore.model.username);
-    
+    if (pb.authStore.model) {
+      setLoggedinUser(pb.authStore.model.username);
+    } else {
+      setLoggedinUser('');
+    }
   };
+
+  useEffect(()=>{
+    updateLoggedinUser();
+  },[])
 
   return (
     <UserContext.Provider value={{ loggedinUser, setLoggedinUser }}>
