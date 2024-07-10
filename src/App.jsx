@@ -72,20 +72,9 @@ export default function Home() {
   };
   
 
-  // const fetchPostLikes = async() => {
-  //   const postsWithLikes = await Promise.all(posts.map(async (post, index) => {
-  //     try {
-  //       const netLikes = await fetchLikes(post.id);
-  //       posts[index]({ ...post, 'netLikes': netLikes });
-  //     } catch (error) {
-  //       console.error(`Error fetching likes for post ${post.id}:`, error);
-  //       posts[index]({ ...post, 'netLikes': 0 }); // Default to 0 netLikes on error
-  //     }
-  //   }));
-  // }
+ 
   useEffect(()=>{
     postsList();
-    // fetchPostLikes();
   },[])
   
   const handlePostClick = (id) => {
