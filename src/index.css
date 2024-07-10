@@ -73,8 +73,8 @@ button:focus-visible {
 
 
 .styled-input::placeholder {
-  color: #8aa3ad; 
-  font-weight: 300;
+  color: #5e6c71; 
+  font-weight: 400;
   font-size: 13px;
 }
 

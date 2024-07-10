@@ -27,27 +27,45 @@ export default function Home() {
   }
 
   return (
-    <main className="min-h-screen w-[calc(100vw_-_6px)] bg-[#0e1113] text-white">
-      {/* <h1 className="font-bold text-3xl pt-10">AMUStudy</h1> */}
+    <>
       <Navbar />
-      <div className="pt-[10vh]">
+      <main className="min-h-screen w-[calc(100vw_-_6px)] flex bg-[#fafbfb] text-black">
+        {/* <h1 className="font-bold text-3xl pt-10">AMUStudy</h1> */}
 
-        <Form refresh={postsList}/>
-        <div className="flex flex-col items-center px-10">
+        {/* <Form refresh={postsList}/> */}
+        <div className="flex flex-col items-start mx-10 w-[60%] mt-[15vh] rounded-md shadow-2xl ">
+          <h1 className="text-[1.7rem] font-bold px-5 pt-[5vh]">Recent Posts</h1>
           {posts.map((post, index) => (
             <div 
             key={index} 
             onClick={() => handlePostClick(post.id)}
-            className="flex flex-col items-start w-[60vw] py-5 pl-2 my-2 hover:rounded-lg hover:bg-[#1d2428]"
-              >
-                <span className="text-gray-600 mb-4 px-2">Posted By : <span className="text-gray-300">{post.username}</span> <p className="text-gray-500 text-sm">{formatDistanceToNow(new Date(post.created))} ago</p></span>
-                <p className="font-semibold text-xl mb-4 text-left px-2">{post.title}</p>
+            className="flex flex-col items-start w-[60vw] py-5 pl-2 my-2 hover:rounded-lg "
+            >
+                <p className="font-medium text-xl text-left px-2">{post.title}</p>
+                <span className="text-[#a4a5aa] mb-4 px-2 text-sm">Asked {formatDistanceToNow(new Date(post.created))} ago by <span className="font-medium">{post.username}</span></span>
                 <p className="mb-4 text-left px-2">{post.text}</p>
                 {post.image !== '' && <img src={`https://amustud.pockethost.io/api/files/${post.collectionId}/${post.id}/${post.image}`} alt="Post" className="w-[400px] h-auto rounded-lg" />}
               </div>
             ))}
         </div>
-      </div>
-    </main>
+        <div className="flex flex-col items-start w-[40%] h-[30vh] mx-10 mt-[15vh] rounded-md shadow-2xl px-5">
+            <h1 className="text-[1.7rem] font-bold pt-[5vh] mb-5">Top Tags</h1>
+            <div className="flex justify-between flex-wrap gap-5">
+              <div>
+                <span className="bg-[#e2e2e6] px-3 py-1 rounded-full text-sm font-medium"> javascript</span>
+                <span className="text-sm pl-2">999</span>
+              </div>
+              <div>
+                <span className="bg-[#e2e2e6] px-3 py-1 rounded-full text-sm font-medium"> python</span>
+                <span className="text-sm pl-2">999</span>
+              </div>
+              <div>
+                <span className="bg-[#e2e2e6] px-3 py-1 rounded-full text-sm font-medium"> typescript</span>
+                <span className="text-sm pl-2">999</span>
+              </div>
+            </div>
+        </div>
+      </main>
+    </>
   );
 }
