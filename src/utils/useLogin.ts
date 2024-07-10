@@ -1,5 +1,5 @@
 import { useContext, useState } from "react";
-import pb from "../../lib/pocketbase";
+import pb from "@/lib/pb";
 import UserContext from "./UserContext";
 
 const useLogin = () => {

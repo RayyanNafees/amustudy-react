@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import pb from "../../lib/pocketbase";
-import UserContext from "../utils/UserContext";
+import pb from "@/lib/pb";
+import UserContext from "@/utils/UserContext";
 import { useContext } from "react";
 
 const Form = ({refresh}) => {
@@ -69,13 +69,13 @@ const Form = ({refresh}) => {
 
   return (
     <div className={`mt-[15vh] p-4 mr-5 bg-[#fafbfb] text-black font-medium rounded-lg shadow ${loggedinUser === '' ? 'cursor-not-allowed' : 'cursor-auto'}`}>
-      <div className="flex flex-col items-center space-x-4 mb-4">
+      <div className="flex flex-col items-center mb-4 space-x-4">
       <input
           type="text"
           className={`w-full py-2 ml-4 bg-[#fafbfb]  rounded-lg focus:outline-none ${loggedinUser === '' ? 'cursor-not-allowed' : 'cursor-auto'}`}
           placeholder="Title"
           value={title}
-          rows='2'
+          rows={2}
           onChange={handleTitleChange}
         />
         <textarea
@@ -83,7 +83,7 @@ const Form = ({refresh}) => {
           className={`w-full resize-y py-2 bg-[#fafbfb]  rounded-lg focus:outline-none ${loggedinUser === '' ? 'cursor-not-allowed' : 'cursor-auto'}`}
           placeholder="Start a post"
           value={inputText}
-          rows='2'
+          rows={2}
           onChange={handleTextChange}
         />
       </div>
@@ -91,14 +91,15 @@ const Form = ({refresh}) => {
         <div className="mb-4">
           <img src={photoURL} alt="Selected" className="w-full h-auto rounded-lg" />
           <span 
-            className="text-red-600 text-md hover:text-red-700 cursor-pointer"
+            className="text-red-600 cursor-pointer text-md hover:text-red-700"
             onClick={handleDelete}
+            onKeyUp={() => false}
         >
             Delete
         </span>
         </div>
       )}
-      <div className="flex items-center justify-between">
+      <div className="flex justify-between items-center">
         <label className={`flex items-center space-x-2 ${loggedinUser === '' ? 'cursor-not-allowed' : 'cursor-pointer'}`}>
           <input
             type="file"
@@ -113,6 +114,7 @@ const Form = ({refresh}) => {
               </svg>
         </label>
         <button
+          type="button"
           onClick={handlePost}
           className={`px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 ${loggedinUser === '' ? 'cursor-not-allowed' : 'cursor-pointer'}`}
         >
