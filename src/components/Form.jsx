@@ -40,7 +40,7 @@ const Form = ({refresh}) => {
   
   const handlePost = async () => {
     
-    formData.append('username', 'sharjeel');
+    formData.append('username', loggedinUser);
     formData.append('title', title);
     formData.append('text', inputText);
     if (photo) {

@@ -7,12 +7,38 @@ import Comment from "../../public/comment.png";
 import Share from "../../public/share.png";
 import User from "../../public/user.png";
 import { useParams } from "react-router-dom";
+import UserContext from "../utils/UserContext";
+import { useContext } from "react";
 
 const Post = () => {
     
     const [post, setPost] = useState({})
-    
+    const [like, setLike] = useState(false);
+    const [dislike, setDislike] = useState(false);
     const {postId} = useParams();
+
+    const { userId } = useContext(UserContext);
+    console.log(userId);
+    const handleReaction = async (reactionType) => {
+        const data = {
+          like: reactionType === 'like' ? 1 : 0,
+          dislike: reactionType === 'dislike' ? 1 : 0,
+          userId: userId,
+          postId: postId,
+        };
+        try {
+            await pb.collection('likes').create(data);
+            if (reactionType === 'like') {
+              setLike(true);
+              setDislike(false);
+            } else {
+              setLike(false);
+              setDislike(true);
+            }
+          } catch (error) {
+            console.log(error);
+          }
+    }
 
     useEffect(() => {
 
@@ -32,7 +58,7 @@ const Post = () => {
     return(
         <>
         <Navbar />
-        <div className='flex bg-[#fafbfb] h-screen  min-w-[calc(100vw_-_6px)] justify-center text-black pt-[15vh]'>
+        <div className='flex bg-[#fafbfb] min-h-screen  min-w-[calc(100vw_-_6px)] justify-center text-black pt-[15vh] pb-[10vh]'>
             <div className='w-[60vw] h-fit flex flex-col shadow rounded-md p-5'>
                 <div className="flex gap-5 items-center text-gray-600 mb-4">
                     <div className='flex items-center justify-center h-[40px] w-[40px] border-[1px] border-gray-500 rounded-full'>
@@ -55,9 +81,19 @@ const Post = () => {
             <div className='flex justify-between w-[100%]'>
                 <div className='flex gap-5'>
                     <div className='flex items-center gap-2  bg-[#fafbfb] shadow rounded-full mb-10'>
-                        <img src={Arrow}  alt='arrow' className='w-[35px] h-[35px] rotate-[270deg] p-2 hover:rounded-full hover:bg-blue-600/40 cursor-pointer'/>
+                        <img 
+                            src={Arrow}  
+                            alt='arrow' 
+                            className='w-[35px] h-[35px] rotate-[270deg] p-2 hover:rounded-full hover:bg-blue-600/40 cursor-pointer' 
+                            onClick={() => handleReaction('like')}
+                        />
                         <span className='text-xs'>999</span>
-                        <img src={Arrow}  alt='arrow' className='w-[35px] h-[35px] p-2 rotate-[90deg] hover:rounded-full hover:bg-red-600/40 cursor-pointer'/>
+                        <img 
+                            src={Arrow}  
+                            alt='arrow' 
+                            className='w-[35px] h-[35px] p-2 rotate-[90deg] hover:rounded-full hover:bg-red-600/40 cursor-pointer' 
+                            onClick={() => handleReaction('dislike')}
+                        />
                     </div>
                     <div className='flex items-center gap-2 px-3 bg-[#fafbfb] shadow rounded-full mb-10 hover:bg-gray-600/40 cursor-pointer'>
                         <img src={Comment} alt='arrow' className='w-[20px] h-[20px] '/>

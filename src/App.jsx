@@ -44,7 +44,7 @@ export default function Home() {
             <div 
             key={index} 
             onClick={() => handlePostClick(post.id)}
-            className="w-[60vw] flex items-center py-5 pl-2 my-2 hover:rounded-lg "
+            className="w-[60vw] flex items-center py-5 pl-2 my-2 hover:rounded-lg hover:bg-gray-100"
             >   
               <div className="flex flex-col items-center gap-2 px-5">
                 <img src={Chevron} className="w-[40px] rotate-[90deg] p-2 rounded-md hover:bg-[#e2e2e6] cursor-pointer"/>
@@ -52,7 +52,7 @@ export default function Home() {
                 <img src={Chevron} className="w-[40px] rotate-[-90deg] p-2 rounded-md hover:bg-[#e2e2e6] cursor-pointer"/>
               </div>
               <div>
-                <p className="font-medium text-xl text-left px-2">{post.title}</p>
+                <p className="font-medium text-xl text-left px-2 cursor-pointer">{post.title}</p>
                 <p className="text-[#a4a5aa] mb-4 px-2 text-sm">Asked {formatDistanceToNow(new Date(post.created))} ago by <span className="font-medium">{post.username}</span></p>
                 <span className="bg-[#e2e2e6] px-3 py-1 rounded-full text-sm font-medium"> javascript</span>
                 {/* <p className="mb-4 text-left px-2">{post.text.slice(0, 300)}</p> */}
