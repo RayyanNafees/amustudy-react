@@ -13,32 +13,62 @@ import { useContext } from "react";
 const Post = () => {
     
     const [post, setPost] = useState({})
-    const [like, setLike] = useState(false);
-    const [dislike, setDislike] = useState(false);
+    const [netLikes, setNetLikes] = useState(0);
     const {postId} = useParams();
 
     const { userId } = useContext(UserContext);
     console.log(userId);
-    const handleReaction = async (reactionType) => {
-        const data = {
-          like: reactionType === 'like' ? 1 : 0,
-          dislike: reactionType === 'dislike' ? 1 : 0,
-          userId: userId,
-          postId: postId,
-        };
-        try {
-            await pb.collection('likes').create(data);
-            if (reactionType === 'like') {
-              setLike(true);
-              setDislike(false);
-            } else {
-              setLike(false);
-              setDislike(true);
-            }
-          } catch (error) {
+
+    const fetchLikes = async () => {
+        try{
+            const records = await pb.collection('likes').getFullList({
+                filter: `postId = "${postId}"`,
+            });
+
+            let totalLikes = 0;
+            let totalDislikes = 0;
+
+            records.forEach(record => {
+                totalLikes += record.like;
+                totalDislikes += record.dislike;
+            });
+
+            const netLikes = totalLikes - totalDislikes;
+            setNetLikes(netLikes);
+            console.log(records);
+        }catch(error){
             console.log(error);
-          }
+        }
     }
+
+    
+    const handleReaction = async (likeValue, dislikeValue) => {
+        try {
+          // Check if the user has already reacted with the same type
+          const existingRecords = await pb.collection('likes').getFullList({
+            filter: `postId = "${postId}" && userId = "${userId}" && ${likeValue ? 'like = 1' : 'dislike = 1'}`,
+          });
+      
+          if (existingRecords.length > 0) {
+            // User has already reacted with the same type, delete the reaction
+            const recordId = existingRecords[0].id;
+            await pb.collection('likes').delete(recordId);
+          } else {
+            // Create a new reaction
+            await pb.collection('likes').create({
+              like: likeValue,
+              dislike: dislikeValue,
+              userId: userId,
+              postId: postId,
+            });
+          }
+      
+          fetchLikes(); // Refresh the likes count after updating
+        } catch (error) {
+          console.log(error);
+        }
+      };
+      
 
     useEffect(() => {
 
@@ -52,7 +82,10 @@ const Post = () => {
                 console.error('Error fetching post:', error);
             }
         }
+
+        
         postView();
+        fetchLikes();
     },[postId])
     
     return(
@@ -85,14 +118,14 @@ const Post = () => {
                             src={Arrow}  
                             alt='arrow' 
                             className='w-[35px] h-[35px] rotate-[270deg] p-2 hover:rounded-full hover:bg-blue-600/40 cursor-pointer' 
-                            onClick={() => handleReaction('like')}
+                            onClick={() => handleReaction(1,0)}
                         />
-                        <span className='text-xs'>999</span>
+                        <span className='text-xs'>{netLikes}</span>
                         <img 
                             src={Arrow}  
                             alt='arrow' 
                             className='w-[35px] h-[35px] p-2 rotate-[90deg] hover:rounded-full hover:bg-red-600/40 cursor-pointer' 
-                            onClick={() => handleReaction('dislike')}
+                            onClick={() => handleReaction(0,1)}
                         />
                     </div>
                     <div className='flex items-center gap-2 px-3 bg-[#fafbfb] shadow rounded-full mb-10 hover:bg-gray-600/40 cursor-pointer'>

@@ -4,27 +4,88 @@ import pb from "../lib/pocketbase";
 import Navbar from "./components/Navbar";
 import { formatDistanceToNow } from "date-fns";
 import Chevron from "../public/chevron.png";
-import { Link } from "react-router-dom";
 import { useNavigate } from 'react-router-dom';
-import useLogout from "./utils/useLogout";
 
 export default function Home() {
   const [posts, setPosts] = useState([]); 
   
   const navigate = useNavigate();
 
+
+  const fetchLikes = async (postId) => {
+      try{
+          const records = await pb.collection('likes').getFullList({
+              filter: `postId = "${postId}"`,
+          });
+          console.log(records);
+          let totalLikes = 0;
+          let totalDislikes = 0;
+
+          records.forEach(record => {
+            if (record.like) {
+              totalLikes += record.like;
+            }
+            if (record.dislike) {
+              totalDislikes += record.dislike;
+            }
+          });
+
+          const netLikes = totalLikes - totalDislikes;
+          return netLikes;
+      }catch(error){
+          console.log(error);
+      }
+  }
+
   const postsList = async () => {
 
-    const resultList = await pb.collection('posts').getList(1, 10, {
-      filter: 'created >= "2022-01-01 00:00:00"',
-      sort: '-created',
-    }, { requestKey: null });
-    console.log(resultList);
-    setPosts(resultList.items)
-  }
-  useEffect(()=>{
+    try {
+      const resultList = await pb.collection('posts').getList(1, 10, {
+        filter: 'created >= "2022-01-01 00:00:00"',
+        sort: '-created',
+      }, { requestKey: null });
 
+      // Update posts state with fetched data
+      setPosts(resultList.items);
+
+      // Initialize an array to store updated posts
+      const updatedPosts = [];
+
+      // Loop through each post and fetch likes sequentially
+      for (let post of resultList.items) {
+        try {
+          const netLikes = await fetchLikes(post.id);
+          post = { ...post, netLikes }; // Create a new object with updated netLikes
+        } catch (error) {
+          console.error(`Error fetching likes for post ${post.id}:`, error);
+          post = { ...post, netLikes: 0 }; // Default to 0 netLikes on error
+        }
+        updatedPosts.push(post); // Push updated post to the array
+      }
+
+      // Update state with the array of updated posts
+      setPosts(updatedPosts);
+
+    } catch (error) {
+      console.error('Error fetching posts:', error);
+    }
+  };
+  
+
+  // const fetchPostLikes = async() => {
+  //   const postsWithLikes = await Promise.all(posts.map(async (post, index) => {
+  //     try {
+  //       const netLikes = await fetchLikes(post.id);
+  //       posts[index]({ ...post, 'netLikes': netLikes });
+  //     } catch (error) {
+  //       console.error(`Error fetching likes for post ${post.id}:`, error);
+  //       posts[index]({ ...post, 'netLikes': 0 }); // Default to 0 netLikes on error
+  //     }
+  //   }));
+  // }
+  useEffect(()=>{
     postsList();
+    // fetchPostLikes();
   },[])
   
   const handlePostClick = (id) => {
@@ -48,7 +109,7 @@ export default function Home() {
             >   
               <div className="flex flex-col items-center gap-2 px-5">
                 <img src={Chevron} className="w-[40px] rotate-[90deg] p-2 rounded-md hover:bg-[#e2e2e6] cursor-pointer"/>
-                <span>10</span>
+                <span>{post.netLikes}</span>
                 <img src={Chevron} className="w-[40px] rotate-[-90deg] p-2 rounded-md hover:bg-[#e2e2e6] cursor-pointer"/>
               </div>
               <div>
