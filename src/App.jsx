@@ -4,13 +4,17 @@ import pb from "../lib/pocketbase";
 import Navbar from "./components/Navbar";
 import { formatDistanceToNow } from "date-fns";
 import Chevron from "../public/chevron.png";
+import { Link } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
 
 export default function Home() {
   const [posts, setPosts] = useState([]); 
   
+  const navigate = useNavigate();
+
   const postsList = async () => {
 
-    const resultList = await pb.collection('posts').getList(1, 50, {
+    const resultList = await pb.collection('posts').getList(1, 10, {
       filter: 'created >= "2022-01-01 00:00:00"',
       sort: '-created',
     }, { requestKey: null });
@@ -23,13 +27,13 @@ export default function Home() {
   },[])
   
   const handlePostClick = (id) => {
-    // router.push(`/post/${id}`);
+    navigate(`/post/${id}`);
   }
 
   return (
     <>
       <Navbar />
-      <main className="min-h-screen w-[calc(100vw_-_6px)] flex bg-[#fafbfb] text-black">
+      <main className="min-h-screen w-[calc(100vw_-_6px)] flex bg-[#fafbfb] text-black pb-[10vh]">
         {/* <h1 className="font-bold text-3xl pt-10">AMUStudy</h1> */}
 
         {/* <Form refresh={postsList}/> */}
