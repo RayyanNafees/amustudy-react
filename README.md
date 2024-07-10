@@ -1,8 +1,5 @@
-# React + Vite
+# AMUStudy 
+![Screenshot 2024-07-10 182401](https://github.com/Sharjeel-Afridi/amustudy-react/assets/52808124/d4181e15-e974-46ea-ba56-0317ea61ed7e)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+![image](https://github.com/Sharjeel-Afridi/amustudy-react/assets/52808124/c6050681-f775-4390-959f-14805f4369a0)
 
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
