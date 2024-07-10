@@ -70,7 +70,10 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
+.shadow{
 
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+}
 
 .styled-input::placeholder {
   color: #5e6c71; 

@@ -64,11 +64,11 @@ const Form = ({refresh}) => {
   };
 
   return (
-    <div className="max-w-md mx-auto p-4 bg-[#2b3336]  rounded-lg shadow-md">
+    <div className="mt-[15vh] p-4 mr-5 bg-[#fafbfb] text-black font-medium rounded-lg shadow">
       <div className="flex flex-col items-center space-x-4 mb-4">
       <input
           type="text"
-          className="w-full  py-2 ml-4 bg-[#2b3336]  rounded-lg focus:outline-none"
+          className="w-full py-2 ml-4 bg-[#fafbfb]  rounded-lg focus:outline-none"
           placeholder="Title"
           value={title}
           rows='2'
@@ -76,7 +76,7 @@ const Form = ({refresh}) => {
         />
         <textarea
           type="text"
-          className="w-full resize-y py-2 bg-[#2b3336]  rounded-lg focus:outline-none"
+          className="w-full resize-y py-2 bg-[#fafbfb]  rounded-lg focus:outline-none"
           placeholder="Start a post"
           value={inputText}
           rows='2'
@@ -85,7 +85,7 @@ const Form = ({refresh}) => {
       </div>
       {photoURL && (
         <div className="mb-4">
-          <Image src={photoURL} alt="Selected" width={200} height={200} className="w-full h-auto rounded-lg" />
+          <img src={photoURL} alt="Selected" className="w-full h-auto rounded-lg" />
           <span 
             className="text-red-600 text-md hover:text-red-700 cursor-pointer"
             onClick={handleDelete}
