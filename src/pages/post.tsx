@@ -6,12 +6,11 @@ import Arrow from "../../public/arrow-black.png";
 import Comment from "../../public/comment.png";
 import Share from "../../public/share.png";
 import User from "../../public/user.png";
-// import { useParams } from "react-router-dom";
 import UserContext from "../utils/UserContext";
 import { useContext } from "react";
 import type { RecordModel } from "pocketbase";
 import { useRoute } from "preact-iso";
-
+import {} from 'preact-iso'
 import dayjs from "dayjs";
 import relativeTime from 'dayjs/plugin/relativeTime';
 
