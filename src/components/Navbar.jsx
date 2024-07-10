@@ -1,11 +1,19 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
+import UserContext from "../utils/UserContext";
+import { useContext } from "react";
+import useLogout from "../utils/useLogout";
 
 const Navbar = () => {
     const [inputText, setInputText] = useState('');
+
+    
+    const logout = useLogout();
+
     const handleTextChange = (e) => {
         setInputText(e.target.value);
       };
-    
+    const { loggedinUser } = useContext(UserContext);
     return(
         <div className="h-[10vh] w-[100%] flex justify-between items-center bg-[#18181b] fixed px-10 font-medium">
             <h1 className="text-[1.2rem] font-bold text-white">
@@ -20,13 +28,20 @@ const Navbar = () => {
                     value={inputText}
                     onChange={handleTextChange}
                     />
-                <span className="text-white">
-                    Login
-                </span>
+                {loggedinUser !== '' ? (
+                    <button 
+                    className="logout-btn text-red-400 hover:border-red-400"
+                    onClick={() => logout()}
+                >
+                  Logout
+                </button>
+                ) : (
+                    <Link to={'/login'} className="text-white hover:text-white/90">
+                        Login
+                    </Link>
+                )}
+                
             </div>
-            {/* <Link href={'/login'}>
-                Login
-            </Link> */}
         </div>
     )
 }

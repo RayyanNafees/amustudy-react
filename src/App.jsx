@@ -6,6 +6,7 @@ import { formatDistanceToNow } from "date-fns";
 import Chevron from "../public/chevron.png";
 import { Link } from "react-router-dom";
 import { useNavigate } from 'react-router-dom';
+import useLogout from "./utils/useLogout";
 
 export default function Home() {
   const [posts, setPosts] = useState([]); 
@@ -79,6 +80,7 @@ export default function Home() {
                   <span className="bg-[#e2e2e6] px-3 py-1 rounded-full text-sm font-medium"> typescript</span>
                   <span className="text-sm pl-2">999</span>
                 </div>
+              
               </div>
           </div>
         </div>

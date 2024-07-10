@@ -1,8 +1,10 @@
-import React from 'react'
 import ReactDOM from 'react-dom/client'
 // import {Provider} from "react-redux";
-import App from './App.jsx'
-import Post from "./pages/Post.jsx"
+import App from './App.jsx';
+import Post from "./pages/Post.jsx";
+import Login from './pages/Login.jsx';
+import Signup from './pages/Signup.jsx';
+import { UserProvider } from "./utils/UserContext.jsx";
 import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
 import './index.css'
 
@@ -23,14 +25,14 @@ const appRouter = createBrowserRouter([
         path: "/post/:postId",
         element: <Post />
       },
-      // {
-      //   path: "/login",
-      //   element: <Login />
-      // },
-      // {
-      //   path:"/signup",
-      //   element: <Signup />
-      // }
+      {
+        path: "/login",
+        element: <Login />
+      },
+      {
+        path:"/signup",
+        element: <Signup />
+      }
     ]
   }
 ])
@@ -39,8 +41,13 @@ const appRouter = createBrowserRouter([
 
 const root = ReactDOM.createRoot(document.getElementById('root'))
 
-root.render(<RouterProvider router={appRouter} />)
-
+root.render(
+  <UserProvider>
+      {/* <DarkModeProvider> */}
+          <RouterProvider router={appRouter}/>
+      {/* </DarkModeProvider> */}
+  </UserProvider>
+  );
 
 // ReactDOM.createRoot(document.getElementById('root')).render(
 //   <React.StrictMode>
