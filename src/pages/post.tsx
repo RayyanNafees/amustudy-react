@@ -1,12 +1,25 @@
 import pb from "@/lib/pb";
-import { getLike, handleLike, getUserReaction, type LikeAction } from "@/lib/likes";
+import {
+  getLike,
+  handleLike,
+  getUserReaction,
+  type LikeAction,
+} from "@/lib/likes";
 import { cx } from "classix";
 
+import {
+  ArrowDownIcon,
+  ArrowUpIcon,
+  ShareIcon,
+  UserIcon,
+  ChatBubbleLeftIcon,
+} from "@heroicons/react/24/solid";
+
 import Navbar from "../components/Navbar";
-import Arrow from "../../public/arrow-black.png";
-import Comment from "../../public/comment.png";
-import Share from "../../public/share.png";
-import User from "../../public/user.png";
+// import Arrow from "../../public/arrow-black.png";
+// import Comment from "../../public/comment.png";
+// import Share from "../../public/share.png";
+// import User from "../../public/user.png";
 
 import type { RecordModel } from "pocketbase";
 import { useRoute } from "preact-iso";
@@ -31,9 +44,10 @@ const getPost = async (postId: string) => {
   });
 
   return {
+    ...post,
     id: post.postId,
     likes: post.netLikes,
-    collectionId: post.collectionId,
+    collectionId: post.expand.postId.collectionId,
 
     userName: post.expand.authorId.name,
     userAvatar: post.expand.authorId.avatar,
@@ -54,10 +68,11 @@ const Post = () => {
     data: post,
     isLoading: postLoading,
     error: postError,
+    mutate: mutatePost,
   } = useSWR(`posts/${postId}`, () => getPost(postId));
 
   const {
-    data: [reaction, likeId],
+    data: [reaction, likeId] = [0, null],
     isLoading: reactionLoading,
     error: reactionError,
     mutate: react,
@@ -86,7 +101,7 @@ const Post = () => {
             <div className="w-[60vw] h-fit flex flex-col shadow rounded-md p-5">
               <div className="flex gap-5 items-center mb-4 text-gray-600">
                 <div className="flex items-center justify-center h-[40px] w-[40px] border-[1px] border-gray-500 rounded-full">
-                  <img src={User} className="w-[30px]" alt="img" />
+                  <UserIcon className="w-[30px]" />
                 </div>
                 <div className="flex flex-col">
                   <span className="font-medium text-black">
@@ -100,7 +115,7 @@ const Post = () => {
               <h1 className="font-semibold text-[1.7rem]">{post.title}</h1>
               {post.image !== "" && (
                 <img
-                  src={`https://amustud.pockethost.io/api/files/${post?.collectionId}/${post.id}/${post.image}`}
+                  src={pb.files.getUrl(post, post.image)}
                   alt="Post"
                   className="w-[400px] h-auto rounded-lg"
                 />
@@ -109,12 +124,10 @@ const Post = () => {
               <div className="flex justify-between w-[100%]">
                 <div className="flex gap-5">
                   <div className="flex items-center gap-2  bg-[#fafbfb] shadow rounded-full mb-10">
-                    <img
-                      src={Arrow}
-                      alt="arrow"
+                    <ArrowUpIcon
                       className={cx(
-                        "p-2 cursor-pointer w-[35px] h-[35px] rotate-[270deg] hover:rounded-full hover:bg-blue-600/40",
-                        reaction === 1 && "bg-green-600"
+                        "p-2 cursor-pointer w-[35px] h-[35px] hover:rounded-full hover:bg-blue-600/40",
+                        reaction === 1 && "text-green-600"
                       )}
                       onClick={() => handleReaction(1)}
                       onKeyUp={() => false}
@@ -129,22 +142,19 @@ const Post = () => {
                           : ""
                       )}
                     >
-                      {post.likes + reaction}
+                      {post.likes+reaction}
                     </span>
-                    <img
-                      src={Arrow}
-                      alt="arrow"
+                    <ArrowDownIcon
                       className={cx(
-                        "p-2 cursor-pointer w-[35px] h-[35px] rotate-[90deg] hover:rounded-full hover:bg-red-600/40",
-                        reaction === 1 && "bg-red-600"
+                        "p-2 cursor-pointer w-[35px] h-[35px] hover:rounded-full hover:bg-red-600/40",
+                        reaction === -1 && "text-red-600"
                       )}
                       onClick={() => handleReaction(-1)}
                       onKeyUp={() => false}
                     />
                   </div>
                   <div className="flex items-center gap-2 px-3 bg-[#fafbfb] shadow rounded-full mb-10 hover:bg-gray-600/40 cursor-pointer">
-                    <img
-                      src={Comment}
+                    <ChatBubbleLeftIcon
                       alt="arrow"
                       className="w-[20px] h-[20px] "
                     />
@@ -152,11 +162,7 @@ const Post = () => {
                   </div>
                 </div>
                 <div className="flex items-center gap-2 p-3 bg-[#fafbfb] shadow rounded-full mb-10  hover:bg-gray-600/40 cursor-pointer">
-                  <img
-                    src={Share}
-                    alt="arrow"
-                    className="w-[20px] h-[20px]  "
-                  />
+                  <ShareIcon className="w-[20px] h-[20px]  " />
                   <span className="text-xs">Share</span>
                 </div>
               </div>

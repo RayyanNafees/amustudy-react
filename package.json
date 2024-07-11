@@ -8,6 +8,7 @@
     "typegen": "pocketbase-typegen --env"
   },
   "dependencies": {
+    "@heroicons/react": "^2.1.5",
     "@preact/signals": "^1.3.0",
     "classix": "^2.1.38",
     "dayjs": "^1.11.11",
